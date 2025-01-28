@@ -24,8 +24,41 @@ const books: Book[] = [
   },
 ];
 
-export const getAllBooks = (): Book[] => {
-  return books;
+export const getBooks = (
+  title: string | undefined,
+  author: string | undefined,
+  genre: string | undefined
+): Book[] => {
+  const resultBooks: [Book, number][] = [];
+  let returnBooks: Book[] = [];
+  const resultLimit: number = 50;
+  // if there is no condition, return all books
+  if (title === undefined && author === undefined && genre === undefined) {
+    return books;
+  }
+  // if there is condition, then do the searching
+  books.forEach((book) => {
+    let matchCount = 0;
+    if (title !== undefined && book.title.indexOf(title) !== -1) {
+      matchCount += 1;
+    }
+    if (author !== undefined && book.author.indexOf(author) !== -1) {
+      matchCount += 1;
+    }
+    if (genre !== undefined && book.genre.indexOf(genre) !== -1) {
+      matchCount += 1;
+    }
+    if (matchCount >= 1 && resultBooks.length < resultLimit) {
+      resultBooks.push([book, matchCount]);
+    }
+  });
+  // prioritize the result books accoring the relevant weight
+  resultBooks.sort((a, b) => b[1] - a[1]);
+  // get the reuslt only contain boos objects
+  resultBooks.forEach((book) => {
+    returnBooks.push(book[0]);
+  });
+  return returnBooks;
 };
 
 /**
