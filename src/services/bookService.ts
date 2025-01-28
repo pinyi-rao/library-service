@@ -1,4 +1,7 @@
-import { Book } from "../models/bookModel";
+import { Book, UserBorrows } from "../models/bookModel";
+
+// initialize the users object
+const users: UserBorrows[] = [{ userId: "user123", borrowedBooks: [] }];
 
 const books: Book[] = [
   {
@@ -143,10 +146,20 @@ export const deleteBook = (id: string): boolean => {
  * console.log(borrowedBook.dueDate);
  */
 export const borrowBook = (id: string, borrowerId: string): Book => {
+  const borrowCountLimit = 5;
   const book = books.find((b) => b.id === id);
+  const user = users.find((u) => (u.userId = borrowerId));
 
   if (!book) {
     throw new Error(`Book with ID ${id} not found`);
+  }
+
+  if (!user) {
+    throw new Error(`User with ID ${borrowerId} not found`);
+  }
+
+  if (user.borrowedBooks.length >= borrowCountLimit) {
+    throw new Error(`User cannot borrow more than ${borrowCountLimit} books`);
   }
 
   if (book.isBorrowed) {
@@ -155,6 +168,7 @@ export const borrowBook = (id: string, borrowerId: string): Book => {
 
   book.isBorrowed = true;
   book.borrowerId = borrowerId;
+  user.borrowedBooks.push(book.title);
 
   // 14 days from now
   book.dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();

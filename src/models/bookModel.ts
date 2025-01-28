@@ -7,3 +7,8 @@ export interface Book {
   borrowerId?: string;
   dueDate?: string;
 }
+
+export interface UserBorrows {
+  userId: string;
+  borrowedBooks: string[];
+}
