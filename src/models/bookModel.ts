@@ -7,3 +7,9 @@ export interface Book {
   borrowerId?: string;
   dueDate?: string;
 }
+
+export interface BookQueryParams {
+  title?: string;
+  author?: string;
+  genre?: string;
+}

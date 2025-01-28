@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import * as bookService from "../services/bookService";
+import { BookQueryParams } from "../models/bookModel";
 
-export const getAllBooks = (req: Request, res: Response): void => {
+export const getBooks = (req: Request, res: Response): void => {
   try {
-    const books = bookService.getAllBooks();
+    // get the search conditions
+    const { title, author, genre }: BookQueryParams = req.query;
+    const books = bookService.getBooks(title, author, genre);
+
     res.status(200).json({ message: "Books retrieved", data: books });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving books" });
