@@ -57,6 +57,7 @@ export const borrowBook = (req: Request, res: Response): void => {
     const { id } = req.params;
     const borrowerId = req.body.borrowerId;
     const result = bookService.borrowBook(id, borrowerId);
+
     if (result) {
       res.status(200).json({ message: "Book borrowed", data: result });
     } else {
